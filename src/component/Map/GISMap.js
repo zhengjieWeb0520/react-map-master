@@ -13,15 +13,18 @@ import 'echarts/lib/chart/map';
 class GISMap extends Component{
     constructor(props){
         super(props);
-/*        let timeStample = new Date().getTime();
         this.state = {
-            madDivID :"mapDiv" + timeStample
-        }*/
+            globalMap : {}
+        }
     }
     componentDidMount(){
-        this.initMap()
+        this.initMap();
+        this.tiledLayerURL = "";
+        this.FeatureLayerURL = "";
     }
+    // 初始化地图
     initMap(){
+        let _this = this;
         const mapOptions = {
             url : 'https://js.arcgis.com/3.24/'
         }
@@ -34,8 +37,8 @@ class GISMap extends Component{
             "dojo/on",
             "dojo/domReady!"],mapOptions).then(([Map, ArcGISTiledMapServiceLayer, ArcGISDynamicMapServiceLayer,
                                                        Extent, SpatialReference,/*EChartsLayer,*/on])=>{
-            var extent = new Extent(120.56, 31.28, 120.65, 31.33, new SpatialReference({ wkid: 4326 }))
-            let globalMap = new Map('madDivID', {
+            let extent = new Extent(120.56, 31.28, 120.65, 31.33, new SpatialReference({ wkid: 4326 }))
+            this.state.globalMap = new Map('madDivID', {
                 center: [120.591, 31.335],
                 zoom: 12,
                 slider: false,
@@ -44,11 +47,34 @@ class GISMap extends Component{
                 showLabels: true,
                 extent: extent,
             });
-            var tiledLayer = new ArcGISTiledMapServiceLayer("http://content.china-ccw.com:6080/arcgis/rest/services/sz84_blue/MapServer",{
+            this.state.globalMap.on('load',()=>{
+                this.state.globalMap.graphics.enableMouseEvents();
+            })
+            let tiledLayer = new ArcGISTiledMapServiceLayer(this.tiledLayerURL,{
                 id: 'baseMap'
             });
-            globalMap.addLayer(tiledLayer);
+            this.state.globalMap.addLayer(tiledLayer);
         })
+    }
+    //添加FeatureLayer图层
+    addFeatureLayer(){
+        esriLoader.loadModules(["esri/map","esri/layers/FeatureLayer"]).then(([Map,FeatureLayer])=>{           
+            let featureLayerOptions = {
+                id : 'carton',
+                mode: FeatureLayer.MODE_AUTO,
+                outFields: ["*"],
+            };
+            var cartonFeatureLayer = new FeatureLayer(this.FeatureLayerURL,featureLayerOptions);
+            this.state.globalMap.addLayer(cartonFeatureLayer);
+        })
+    }
+    //移除图层
+    removeLayer(){
+        //esriLoader.loadModules(["esri/map"]).then(([Map]) =>{
+            let display = this.state.globalMap.getLayer('carton');
+            if(display !== null)
+            display.clear();
+        //})
     }
     render(){
         let mapStyle = {
@@ -57,6 +83,10 @@ class GISMap extends Component{
         }
         return(
             <div>
+                <div>
+                    <button onClick={this.addFeatureLayer.bind(this)}>添加FeatureLayer图层</button>
+                    <button onClick={this.removeLayer.bind(this)}>移除图层</button>
+                </div>
                 <div id="madDivID" style={mapStyle}>
                 </div>
             </div>
