@@ -1,51 +1,37 @@
 import React, {Component} from 'react'
 
-import esriLoader from 'esri-loader'
-//import EsriLoader from 'esri-loader-react'
+import L from 'leaflet';
+import esri,{tiledMapLayer} from 'esri-leaflet'; 
 
 export default class LeafNet extends Component{
     constructor(props){
         super(props);
-        this.tiledLayerURL = "http://content.china-ccw.com:5080/arcgis/rest/services/BaseMap/Szdzdt2017_wgs84/MapServer";
+        this.state = {
+            leafletMap : {}
+        }
     }
     componentDidMount(){
-        if(!esriLoader.isLoaded()){
-            esriLoader.bootstrap((err) => {
-                if(err){
-                    console.error(err);
-                } else {
-                    this.initMap();
-                }
-            },{
-                url : 'https://js.arcgis.com/3.24/'
-            })
-        }else{
-            this.initMap()
-        }
+        this.initMap();
     };
-    initMap(){
-        esriLoader.dojoRequire(["esri/map","esri/layers/ArcGISTiledMapServiceLayer", "esri/geometry/Extent",
-        "esri/SpatialReference"],(Map,ArcGISTiledMapServiceLayer,Extent,SpatialReference) => {
-            let extent = new Extent(113.56, 28.28, 125.65, 33.33, new SpatialReference({ wkid: 4326 }))
-            this.state.globalMap = new Map('madDivID', {
-                center: [120.591, 31.335],
-                zoom: 0,
-                slider: false,
-                //center: new Point(116.46, 39.92),
-                //zoom: 10,
-                showLabels: true,
-                extent: extent,
-            });
-            let tiledLayer = new ArcGISTiledMapServiceLayer(this.tiledLayerURL,{
-                id: 'baseMap'
-            });
-            this.state.globalMap.addLayer(tiledLayer);
-        })
+    initMap(){      
+        console.log(L);
+        this.state.leafletMap = L.map("leafMapDiv").setView([31.335,120.591], 16);
+        //高德地图
+        // L.tileLayer('http://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}', {
+        //     subdomains: "1234",
+        //     attribution: '高德地图'
+        //   }).addTo(this.state.leafletMap); 
+        let basemap = tiledMapLayer({url:"http://map.geoq.cn/ArcGIS/rest/services/ChinaOnlineStreetPurplishBlue/MapServer"}).addTo(this.state.leafletMap);
+
     }
     render(){
+        let style = {
+            width: '100%',
+            height : '100%'
+        }
         return(
             <div>
-                <div id="mapDiv"></div>
+                <div id="leafMapDiv" style={style}>leafNet</div>
             </div>
         )
     }
