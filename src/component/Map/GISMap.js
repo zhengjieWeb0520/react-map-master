@@ -15,12 +15,13 @@ class GISMap extends Component{
         super(props);
         this.state = {
             globalMap : {}
-        }
+        };
+        this.tiledLayerURL = "";
+        this.FeatureLayerURL = "";
+        this.DynamicLayerURL = "";
     }
     componentDidMount(){
         this.initMap();
-        this.tiledLayerURL = "";
-        this.FeatureLayerURL = "";
     }
     // 初始化地图
     initMap(){
@@ -37,44 +38,78 @@ class GISMap extends Component{
             "dojo/on",
             "dojo/domReady!"],mapOptions).then(([Map, ArcGISTiledMapServiceLayer, ArcGISDynamicMapServiceLayer,
                                                        Extent, SpatialReference,/*EChartsLayer,*/on])=>{
-            let extent = new Extent(120.56, 31.28, 120.65, 31.33, new SpatialReference({ wkid: 4326 }))
+            let extent = new Extent(113.56, 28.28, 125.65, 33.33, new SpatialReference({ wkid: 4326 }))
             this.state.globalMap = new Map('madDivID', {
                 center: [120.591, 31.335],
-                zoom: 12,
+                zoom: 0,
                 slider: false,
                 //center: new Point(116.46, 39.92),
                 //zoom: 10,
                 showLabels: true,
                 extent: extent,
             });
-            this.state.globalMap.on('load',()=>{
-                this.state.globalMap.graphics.enableMouseEvents();
-            })
             let tiledLayer = new ArcGISTiledMapServiceLayer(this.tiledLayerURL,{
                 id: 'baseMap'
             });
             this.state.globalMap.addLayer(tiledLayer);
+            this.state.globalMap.on('load',()=>{
+                this.state.globalMap.graphics.enableMouseEvents();
+                //显示鼠标移入的经纬度
+                this.state.globalMap.on("mouse-move",(e)=>{
+                    ReactDOM.render((<div><span>经度:</span><span>{e.mapPoint.x}</span>&nbsp;&nbsp;<span>纬度:</span><span>{e.mapPoint.y}</span></div>),document.getElementById("CorInfo"))
+                })
+            })
         })
     }
     //添加FeatureLayer图层
     addFeatureLayer(){
-        esriLoader.loadModules(["esri/map","esri/layers/FeatureLayer"]).then(([Map,FeatureLayer])=>{           
-            let featureLayerOptions = {
-                id : 'carton',
-                mode: FeatureLayer.MODE_AUTO,
-                outFields: ["*"],
-            };
-            var cartonFeatureLayer = new FeatureLayer(this.FeatureLayerURL,featureLayerOptions);
-            this.state.globalMap.addLayer(cartonFeatureLayer);
+        esriLoader.loadModules(["esri/map","esri/layers/FeatureLayer"]).then(([Map,FeatureLayer])=>{   
+            let displayLayer = this.state.globalMap.getLayer("carton");
+            if(displayLayer)  {
+                displayLayer.show();
+            }else{
+                let featureLayerOptions = {
+                    id : 'carton',
+                    mode: FeatureLayer.MODE_AUTO,
+                    outFields: ["*"],
+                };
+                displayLayer = new FeatureLayer(this.FeatureLayerURL,featureLayerOptions);
+                this.state.globalMap.addLayer(displayLayer);
+            }
         })
     }
-    //移除图层
-    removeLayer(){
-        //esriLoader.loadModules(["esri/map"]).then(([Map]) =>{
-            let display = this.state.globalMap.getLayer('carton');
-            if(display !== null)
-            display.clear();
-        //})
+    //隐藏FeatureLayer图层
+    removeFeatureLayer(){
+        let display = this.state.globalMap.getLayer('carton');
+        if(display !== null)
+        display.hide();
+    }
+    //添加DynamicLayer图层
+    addDynamicLayer(){
+        esriLoader.loadModules(["esri/layers/ArcGISDynamicMapServiceLayer"]).then(([ArcGISDynamicMapServiceLayer]) => {
+            let displayLayer = new ArcGISDynamicMapServiceLayer(this.DynamicLayerURL,{
+                id : "cartonLayer"
+            })
+            this.state.globalMap.addLayer(displayLayer);
+            console.log(this.state.globalMap);
+        })
+    }
+    //移除Dynamic图层
+    removeDynamicLayer(){
+        let display = this.state.globalMap.getLayer("cartonLayer");
+        if(display !== null)
+        this.state.globalMap.removeLayer(display);
+    }
+    //清除所有图层
+    removeAllLayer(){
+        let layersArray = this.state.globalMap.layerIds
+        console.log(layersArray);
+        layersArray.forEach((layer) => {
+            if(layer != "baseMap"){
+                let display = this.state.globalMap.getLayer(layer);
+                this.state.globalMap.removeLayer(display)
+            }
+        })
     }
     render(){
         let mapStyle = {
@@ -85,10 +120,14 @@ class GISMap extends Component{
             <div>
                 <div>
                     <button onClick={this.addFeatureLayer.bind(this)}>添加FeatureLayer图层</button>
-                    <button onClick={this.removeLayer.bind(this)}>移除图层</button>
+                    <button onClick={this.removeFeatureLayer.bind(this)}>移除FeatureLayer图层</button>
+                    <button onClick={this.addDynamicLayer.bind(this)}>添加DynamicLayer图层</button>
+                    <button onClick={this.removeDynamicLayer.bind(this)}>移除DynamicLayer图层</button>
+                    <button onClick={this.removeAllLayer.bind(this)}>清除所有图层</button>
                 </div>
                 <div id="madDivID" style={mapStyle}>
                 </div>
+                <div id="CorInfo"></div>
             </div>
         )
     }
