@@ -8,6 +8,7 @@ import GISMap from './../Map/GISMap'
 import BMap from './../Map/BMap'
 import AMap from './../Map/AMap'
 import Echarts from './../Map/Echarts'
+import LeafNet from './../Map/LeafNet'
 class Main extends Component{
     render(){
         return(
@@ -17,6 +18,7 @@ class Main extends Component{
                     <Route path="/BMap" component={BMap} />
                     <Route path="/AMap" component={AMap} />
                     <Route path="/Echarts" component={Echarts} />
+                    <Route path="/LeafNet" component={LeafNet}/>
                 </Switch>
             </main>
         )
