@@ -1,3 +1,9 @@
+// 公用样式
+// li标签的浮动
+.lifloat{
+    float: left;
+    margin-left: 20px;
+}
 .App{
     height:100%;
     header{
@@ -5,9 +11,8 @@
         nav{
             ul{
                 li{
-                    float: left;
+                    @extend .lifloat;
                     font-size: 16px;
-                    margin-left: 20px;
                 }
             }
         }
@@ -27,6 +32,17 @@
                 span{
                     color:white;
                 }                
+            }
+            >div{
+                ul{
+                    li{
+                        @extend .lifloat;
+                        font-size: 16px;
+                        a{
+                            color:#000000
+                        }                       
+                    }
+                }
             }
         }
     }

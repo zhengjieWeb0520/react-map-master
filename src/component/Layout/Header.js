@@ -15,7 +15,7 @@ class Header extends Component{
                         <li><Link to="/BMap">BMap</Link></li>
                         <li><Link to="/AMap">AMap</Link></li>
                         <li><Link to="/Echarts">Echarts</Link></li>
-                        <li><Link to="/LeafNet">LeafNet</Link></li>
+                        <li><Link to="/LeafLet">LeafLet</Link></li>
                     </ul>
                 </nav>
             </header>

@@ -1,3 +1,8 @@
+.lifloat, .App header nav ul li, .App main > div > div ul li {
+  float: left;
+  margin-left: 20px;
+}
+
 .App {
   height: 100%;
 }
@@ -7,9 +12,7 @@
 }
 
 .App header nav ul li {
-  float: left;
   font-size: 16px;
-  margin-left: 20px;
 }
 
 .App main {
@@ -32,5 +35,13 @@
 
 .App main > div #CorInfo span {
   color: white;
+}
+
+.App main > div > div ul li {
+  font-size: 16px;
+}
+
+.App main > div > div ul li a {
+  color: #000000;
 }
 /*# sourceMappingURL=ArcGISStyle.css.map */
