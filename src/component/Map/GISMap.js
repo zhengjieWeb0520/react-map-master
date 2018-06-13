@@ -6,9 +6,9 @@ import ReactDOM from 'react-dom';
 import esriLoader  from 'esri-loader';
 import EsriLoader from 'esri-loader-react';
 
-import echarts from 'echarts/lib/echarts';
-import 'echarts/map/js/china';
-import 'echarts/lib/chart/map';
+// import echarts from 'echarts/lib/echarts';
+// import 'echarts/map/js/china';
+// import 'echarts/lib/chart/map';
 
 class GISMap extends Component{
     constructor(props){
@@ -16,9 +16,9 @@ class GISMap extends Component{
         this.state = {
             globalMap : {}
         };
-        this.tiledLayerURL = "";
-        this.FeatureLayerURL = "";
-        this.DynamicLayerURL = "";
+        this.tiledLayerURL = "http://content.china-ccw.com:5080/arcgis/rest/services/BaseMap/Szdzdt2017_wgs84/MapServer";
+        this.FeatureLayerURL = "http://content.china-ccw.com:7080/arcgis/rest/services/SZHB263/XZQH_WGS84/MapServer/1";
+        this.DynamicLayerURL = "http://content.china-ccw.com:7080/arcgis/rest/services/SZHB263/XZQH_WGS84/MapServer";
     }
     componentDidMount(){
         this.initMap();

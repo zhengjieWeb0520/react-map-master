@@ -1,11 +1,12 @@
 import React,{Component} from 'react';
-import EchartsTimeLine from './MapChildren/EchartsTimeLine'
+import echarts from 'echarts'
 
 export default class Echarts extends Component{
     render(){
+        console.log(echarts);
         return(
-            <div>
-                <EchartsTimeLine />
+            <div id="EchartsDiv">
+                Echarts
             </div>
         )
     }

@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import L from 'leaflet';
 import {tiledMapLayer,dynamicMapLayer,featureLayer} from 'esri-leaflet';
 
+import imgURL from './../../imgers/imglayer.jpg'
 export default class LeafLetGISServerMap extends Component{
     constructor(props){
         super(props)
@@ -11,9 +12,11 @@ export default class LeafLetGISServerMap extends Component{
         }
         this.dynamicLayer = {}
         this.featureLayer = {}
+        this.imgLayer = {}
         this.tiledURL = "http://map.geoq.cn/ArcGIS/rest/services/ChinaOnlineStreetPurplishBlue/MapServer"
-        this.FeatureLayerURL = "";
-        this.DynamicLayerURL = "";
+        this.FeatureLayerURL = "http://content.china-ccw.com:7080/arcgis/rest/services/SZHB263/XZQH_WGS84/MapServer/1";
+        this.DynamicLayerURL = "http://content.china-ccw.com:7080/arcgis/rest/services/SZHB263/XZQH_WGS84/MapServer";
+        this.imgURL = "http://localhost/EsriSample/imglayer.jpg";
     }
     componentDidMount(){
         this.initMap();
@@ -72,6 +75,21 @@ export default class LeafLetGISServerMap extends Component{
             this.state.leafletMap.removeLayer(this.dynamicLayer) 
         }
     }
+    //添加ImageLayer
+    addImagecLayer(){
+        let imgURL = this.imgURL;
+        let imageBounds = [[60,150],[1,60]];
+        this.imgLayer = L.imageOverlay(imgURL,imageBounds);
+        this.state.leafletMap.addLayer(this.imgLayer);
+        console.log(this.state.leafletMap);
+    }
+    //移除ImageLayer
+    removeImageLayer(){
+        if(this.state.leafletMap.hasLayer(this.imgLayer))
+        {
+            this.state.leafletMap.removeLayer(this.imgLayer) 
+        }       
+    }
     removeAllLayer(){}
     render(){
         let style = {
@@ -81,10 +99,12 @@ export default class LeafLetGISServerMap extends Component{
         return(
             <div style={style}>
                 <div>
-                    <button onClick={this.addFeatureLayer.bind(this)}>添加FeatureLayer图层</button>
-                    <button onClick={this.removeFeatureLayer.bind(this)}>移除FeatureLayer图层</button>
-                    <button onClick={this.addDynamicLayer.bind(this)}>添加DynamicLayer图层</button>
-                    <button onClick={this.removeDynamicLayer.bind(this)}>移除DynamicLayer图层</button>
+                    <button onClick={this.addFeatureLayer.bind(this)}>添加Feature图层</button>
+                    <button onClick={this.removeFeatureLayer.bind(this)}>移除Feature图层</button>
+                    <button onClick={this.addDynamicLayer.bind(this)}>添加Dynamic图层</button>
+                    <button onClick={this.removeDynamicLayer.bind(this)}>移除Dynamic图层</button>
+                    <button onClick={this.addImagecLayer.bind(this)}>添加Image图层</button>
+                    <button onClick={this.removeImageLayer.bind(this)}>移除Image图层</button>
                 </div>
                 <div id="leafMapDiv" style={style}>leafNet</div>
                 <div id="CorInfo"></div>
