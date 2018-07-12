@@ -1,4 +1,5 @@
 import React, {Component} from 'react'
+import './../../CSS/sass/ESsass.scss'
 
 export default class ES6 extends Component{
     constructor(props){
@@ -70,6 +71,9 @@ export default class ES6 extends Component{
         return(
             <div>
                 ES6
+                <div className="aa">
+                    <div className="bb"></div>
+                </div>
             </div>
         )
     }

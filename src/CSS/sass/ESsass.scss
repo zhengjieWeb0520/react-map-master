@@ -1,0 +1,12 @@
+$aa : red;
+$bb: green;
+.aa{
+    width:200px;
+    height:200px;
+    background: $aa;
+    .bb{
+        width:200px;
+        height:200px;
+        background: $bb;     
+    }
+}
