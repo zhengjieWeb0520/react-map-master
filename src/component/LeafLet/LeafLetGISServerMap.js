@@ -14,8 +14,8 @@ export default class LeafLetGISServerMap extends Component{
         this.featureLayer = {}
         this.imgLayer = {}
         this.tiledURL = "http://map.geoq.cn/ArcGIS/rest/services/ChinaOnlineStreetPurplishBlue/MapServer"
-        this.FeatureLayerURL = "http://content.china-ccw.com:7080/arcgis/rest/services/SZHB263/XZQH_WGS84/MapServer/1";
-        this.DynamicLayerURL = "http://content.china-ccw.com:7080/arcgis/rest/services/SZHB263/XZQH_WGS84/MapServer";
+        this.FeatureLayerURL = "http://localhost:6080/arcgis/rest/services/Guangxi/MapServer/2";
+        this.DynamicLayerURL = "http://localhost:6080/arcgis/rest/services/sst/MapServer";
         this.imgURL = "http://localhost/EsriSample/imglayer.jpg";
     }
     componentDidMount(){

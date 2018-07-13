@@ -16,9 +16,9 @@ class GISMap extends Component{
         this.state = {
             globalMap : {}
         };
-        this.tiledLayerURL = "http://content.china-ccw.com:5080/arcgis/rest/services/BaseMap/Szdzdt2017_wgs84/MapServer";
-        this.FeatureLayerURL = "http://content.china-ccw.com:7080/arcgis/rest/services/SZHB263/XZQH_WGS84/MapServer/1";
-        this.DynamicLayerURL = "http://content.china-ccw.com:7080/arcgis/rest/services/SZHB263/XZQH_WGS84/MapServer";
+        this.tiledLayerURL = "http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer";
+        this.FeatureLayerURL = "http://localhost:6080/arcgis/rest/services/Guangxi/MapServer/2";
+        this.DynamicLayerURL = "http://localhost:6080/arcgis/rest/services/sst/MapServer";
     }
     componentDidMount(){
         this.initMap();
